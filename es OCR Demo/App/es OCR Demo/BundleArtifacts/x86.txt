@@ -1,0 +1,2 @@
+MainPackage=C:\Users\l.woltmann\Documents\Projects\es OCR Demo\es OCR Demo\App\es OCR Demo\bin\x86\Release\es OCR Demo_1.0.0.0_x86.appx
+SymbolPackage=C:\Users\l.woltmann\OneDrive - es euregio systems GmbH\esocrdemo\es OCR Demo_1.0.0.0_Test\es OCR Demo_1.0.0.0_x86.appxsym
