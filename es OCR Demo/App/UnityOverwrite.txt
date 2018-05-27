@@ -5,11 +5,11 @@
 # Write a line equal to 'overwrite-all' (without quotes) to overwrite everything (preserved accross builds)
 # Write a line equal to 'keep-all' (without quotes) to keep files regardless their modification (preserved accross builds)
 # Default behavior is to never overwrite files
-es OCR Demo.sln: 349196DAC94CF71195B115E26530CDFE
+es OCR Demo.sln: modified
 es OCR Demo\App.cs: A318F54A3B6673448BA8535D26D46AEE
 es OCR Demo\AssemblyConverterArgs.txt: 174D75DCDB2D022CF26F77004B76364F
-es OCR Demo\es OCR Demo.csproj: 7986C8DF560F658E05D19FA898B6D4F8
-es OCR Demo\es OCR Demo.csproj.user: BEFB8AC4886C4CFDD3C68445D6F19B04
+es OCR Demo\es OCR Demo.csproj: modified
+es OCR Demo\es OCR Demo.csproj.user: modified
 es OCR Demo\Package.appxmanifest: 0ACDA19D633CF5C5C90E317F25270A13
 es OCR Demo\project.json: 1D02BC64BAC0D041019673A1C4C51737
 es OCR Demo\Assets\SplashScreen.scale-200.png: A85C1D7624B6902CF8CEBD6F0200A826
@@ -19,5 +19,15 @@ es OCR Demo\Assets\Square44x44Logo.targetsize-24.png: 156637F7B5363E983E7A46D8E5
 es OCR Demo\Assets\Square44x44Logo.targetsize-24_altform-unplated.png: 156637F7B5363E983E7A46D8E533A23D
 es OCR Demo\Assets\StoreLogo.png: 90BD194CA4A7CFFF3E8B8222229857FB
 es OCR Demo\Assets\Wide310x150Logo.scale-200.png: C96846A80DF667F87355569CD816192D
+es OCR Demo\obj\x86\Debug\es OCR Demo.csproj.CopyComplete: D41D8CD98F00B204E9800998ECF8427E
+es OCR Demo\obj\x86\Release\es OCR Demo.csproj.CopyComplete: D41D8CD98F00B204E9800998ECF8427E
+es OCR Demo\obj\x86\Release\PackageLayout\Assets\SplashScreen.scale-200.png: A85C1D7624B6902CF8CEBD6F0200A826
+es OCR Demo\obj\x86\Release\PackageLayout\Assets\Square150x150Logo.scale-200.png: E02834B4A5DFB97FF8E212C1CACBB084
+es OCR Demo\obj\x86\Release\PackageLayout\Assets\Square44x44Logo.scale-200.png: 6C6EF27184ABE9D870A9D564953775DE
+es OCR Demo\obj\x86\Release\PackageLayout\Assets\Square44x44Logo.targetsize-24.png: 156637F7B5363E983E7A46D8E533A23D
+es OCR Demo\obj\x86\Release\PackageLayout\Assets\Square44x44Logo.targetsize-24_altform-unplated.png: 156637F7B5363E983E7A46D8E533A23D
+es OCR Demo\obj\x86\Release\PackageLayout\Assets\StoreLogo.png: 90BD194CA4A7CFFF3E8B8222229857FB
+es OCR Demo\obj\x86\Release\PackageLayout\Assets\Wide310x150Logo.scale-200.png: C96846A80DF667F87355569CD816192D
+es OCR Demo\obj\x86\Release\PackageLayout\Properties\Default.rd.xml: 72EB282657164E79A1C42F6240984826
 es OCR Demo\Properties\Default.rd.xml: 72EB282657164E79A1C42F6240984826
 GeneratedProjects\UWP\Assembly-CSharp\project.json: 1D02BC64BAC0D041019673A1C4C51737

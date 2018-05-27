@@ -14,7 +14,7 @@ public class VisionManager : MonoBehaviour {
     // you must insert your service key here!    
     private string authorizationKey = "39ed4bdbe69e4b0ab6cb22a319493edd";
     private const string ocpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
-    private string visionAnalysisEndpoint = "https://westeurope.api.cognitive.microsoft.com/vision/v2.0/recognizeText?mode=Printed";   // This is where you need to update your endpoint, if you set your location to something other than west-us.
+    private string visionAnalysisEndpoint = "https://westeurope.api.cognitive.microsoft.com/vision/v2.0/analyze?visualFeatures=Tags&language=en";   // This is where you need to update your endpoint, if you set your location to something other than west-us.
 
     internal byte[] imageBytes;
 
