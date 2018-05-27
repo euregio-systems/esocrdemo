@@ -7,7 +7,7 @@
 
     For more information on package manifest files, see http://go.microsoft.com/fwlink/?LinkID=241727
   -->
-  <Identity Name="Template3D" Publisher="CN=DefaultCompany" Version="1.0.2.0" ProcessorArchitecture="x86" />
+  <Identity Name="Template3D" Publisher="CN=DefaultCompany" Version="1.0.11.0" ProcessorArchitecture="x86" />
   <mp:PhoneIdentity PhoneProductId="4f22898d-ae34-4a1a-9db4-154afc393aed" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>es OCR Demo</DisplayName>
@@ -35,6 +35,9 @@
       </uap:VisualElements>
     </Application>
   </Applications>
+  <Capabilities>
+    <DeviceCapability Name="webcam" />
+  </Capabilities>
   <Extensions>
     <Extension Category="windows.activatableClass.inProcessServer">
       <InProcessServer>

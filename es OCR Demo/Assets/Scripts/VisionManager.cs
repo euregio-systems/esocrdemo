@@ -7,14 +7,17 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
+using Windows.Foundation.Diagnostics;
+using System.Text;
 
 public class VisionManager : MonoBehaviour {
     public static VisionManager instance;
+    LoggingChannel lc = new LoggingChannel("es Demo", null, new System.Guid("4bd2826e-54a1-4ba9-bf63-92b73ea1ac4a"));
 
     // you must insert your service key here!    
     private string authorizationKey = "39ed4bdbe69e4b0ab6cb22a319493edd";
     private const string ocpApimSubscriptionKeyHeader = "Ocp-Apim-Subscription-Key";
-    private string visionAnalysisEndpoint = "https://westeurope.api.cognitive.microsoft.com/vision/v2.0/analyze?visualFeatures=Tags&language=en";   // This is where you need to update your endpoint, if you set your location to something other than west-us.
+    private string visionAnalysisEndpoint = "https://westeurope.api.cognitive.microsoft.com/vision/v1.0/analyze?visualFeatures=Tags&language=en";   // This is where you need to update your endpoint, if you set your location to something other than west-us.
 
     internal byte[] imageBytes;
 
@@ -56,60 +59,69 @@ public class VisionManager : MonoBehaviour {
     /// </summary>
     public IEnumerator AnalyseLastImageCaptured()
     {
-        WWWForm webForm = new WWWForm();
-        using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(visionAnalysisEndpoint, webForm))
-        {
-            // gets a byte array out of the saved image
-            imageBytes = GetImageAsByteArray(imagePath);
-            unityWebRequest.SetRequestHeader("Content-Type", "application/octet-stream");
-            unityWebRequest.SetRequestHeader(ocpApimSubscriptionKeyHeader, authorizationKey);
 
-            // the download handler will help receiving the analysis from Azure
-            unityWebRequest.downloadHandler = new DownloadHandlerBuffer();
+            lc.LogMessage("Sende Data");
+            WWWForm webForm = new WWWForm();
+            using (UnityWebRequest unityWebRequest = UnityWebRequest.Post(visionAnalysisEndpoint, webForm))
+            {
+                // gets a byte array out of the saved image
+                imageBytes = GetImageAsByteArray(imagePath);
+                unityWebRequest.SetRequestHeader("Content-Type", "application/json");
+                unityWebRequest.SetRequestHeader(ocpApimSubscriptionKeyHeader, authorizationKey);
 
-            // the upload handler will help uploading the byte array with the request
-            unityWebRequest.uploadHandler = new UploadHandlerRaw(imageBytes);
-            unityWebRequest.uploadHandler.contentType = "application/octet-stream";
+                byte[] bytes = Encoding.ASCII.GetBytes("{((char)34)url((char)34):((char)34)https://img.purch.com/w/660/aHR0cDovL3d3dy5saXZlc2NpZW5jZS5jb20vaW1hZ2VzL2kvMDAwLzA5Ny85NTkvb3JpZ2luYWwvc2h1dHRlcnN0b2NrXzYzOTcxNjY1LmpwZw==((char)34)}");
 
-            yield return unityWebRequest.SendWebRequest();
+                unityWebRequest.uploadHandler = new UploadHandlerRaw(bytes);
 
-            long responseCode = unityWebRequest.responseCode;
+                unityWebRequest.uploadHandler.contentType = "application/json";
 
+
+                // the download handler will help receiving the analysis from Azure
+                unityWebRequest.downloadHandler = new DownloadHandlerBuffer();
             try
             {
-                string jsonResponse = null;
-                jsonResponse = unityWebRequest.downloadHandler.text;
+                unityWebRequest.SendWebRequest();
+            }catch(Exception e) { lc.LogMessage(e.Message); }
+                yield return unityWebRequest.SendWebRequest();
+                long responseCode = unityWebRequest.responseCode;
+                lc.LogMessage("ResponseCode = " + responseCode);
 
-                // The response will be in Json format
-                // therefore it needs to be deserialized into the classes AnalysedObject and TagData
-                AnalysedObject analysedObject = new AnalysedObject();
-                analysedObject = JsonUtility.FromJson<AnalysedObject>(jsonResponse);
-
-                if (analysedObject.tags == null)
+                try
                 {
-                    Debug.Log("analysedObject.tagData is null");
-                }
-                else
-                {
-                    Dictionary<string, float> tagsDictionary = new Dictionary<string, float>();
+                    string jsonResponse = null;
+                    jsonResponse = unityWebRequest.downloadHandler.text;
 
-                    foreach (TagData td in analysedObject.tags)
+                    lc.LogMessage("Antwort: " + responseCode + "   " + jsonResponse);
+                    // The response will be in Json format
+                    // therefore it needs to be deserialized into the classes AnalysedObject and TagData
+                    AnalysedObject analysedObject = new AnalysedObject();
+                    analysedObject = JsonUtility.FromJson<AnalysedObject>(jsonResponse);
+
+                    if (analysedObject.tags == null)
                     {
-                        TagData tag = td as TagData;
-                        tagsDictionary.Add(tag.name, tag.confidence);
+                        Debug.Log("analysedObject.tagData is null");
                     }
+                    else
+                    {
+                        Dictionary<string, float> tagsDictionary = new Dictionary<string, float>();
 
-                    ResultsLabel.instance.SetTagsToLastLabel(tagsDictionary);
+                        foreach (TagData td in analysedObject.tags)
+                        {
+                            TagData tag = td as TagData;
+                            tagsDictionary.Add(tag.name, tag.confidence);
+                        }
+
+                        ResultsLabel.instance.SetTagsToLastLabel(tagsDictionary);
+                    }
                 }
-            }
-            catch (Exception exception)
-            {
-                Debug.Log("Json exception.Message: " + exception.Message);
-            }
+                catch (Exception exception)
+                {
+                    Debug.Log("Json exception.Message: " + exception.Message);
+                }
 
-            yield return null;
+                
+            }
         }
-    }
 
     /// <summary>
     /// Returns the contents of the specified file as a byte array.

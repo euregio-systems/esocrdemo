@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.XR.WSA.Input;
 using UnityEngine.XR.WSA.WebCam;
+using Windows.Foundation.Diagnostics;
 
 public class ImageCapture : MonoBehaviour {
     public static ImageCapture instance;
@@ -13,9 +14,10 @@ public class ImageCapture : MonoBehaviour {
     private PhotoCapture photoCaptureObject = null;
     private GestureRecognizer recognizer;
     private bool currentlyCapturing = false;
-	
-	// Update is called once per frame
-	void Update () {
+    LoggingChannel lc = new LoggingChannel("es Demo", null, new System.Guid("4bd2826e-54a1-4ba9-bf63-92b73ea1ac4a"));
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
@@ -27,6 +29,8 @@ public class ImageCapture : MonoBehaviour {
 
     void Start()
     {
+        lc.LogMessage("I made a message!");
+
         // subscribing to the Hololens API gesture recognizer to track user gestures
         recognizer = new GestureRecognizer();
         recognizer.SetRecognizableGestures(GestureSettings.Tap);
@@ -63,6 +67,7 @@ public class ImageCapture : MonoBehaviour {
     {
         // Call StopPhotoMode once the image has successfully captured
         photoCaptureObject.StopPhotoModeAsync(OnStoppedPhotoMode);
+        lc.LogMessage("Foto abgespeichert");
     }
 
     void OnStoppedPhotoMode(PhotoCapture.PhotoCaptureResult result)
@@ -71,6 +76,7 @@ public class ImageCapture : MonoBehaviour {
         // to the VisionManager class
         photoCaptureObject.Dispose();
         photoCaptureObject = null;
+        lc.LogMessage("Starte Analyse");
         StartCoroutine(VisionManager.instance.AnalyseLastImageCaptured());
     }
 
@@ -80,10 +86,8 @@ public class ImageCapture : MonoBehaviour {
     /// </summary>    
     private void ExecuteImageCaptureAndAnalysis()
     {
-        // Set the camera resolution to be the highest possible    
-        Resolution cameraResolution = PhotoCapture.SupportedResolutions.OrderByDescending((res) => res.width * res.height).First();
-
-        Texture2D targetTexture = new Texture2D(cameraResolution.width, cameraResolution.height);
+        lc.LogMessage ("ExecuteImageCaptureAndAnalysis");
+        Texture2D targetTexture = new Texture2D(1280, 720);
 
         // Begin capture process, set the image format    
         PhotoCapture.CreateAsync(false, delegate (PhotoCapture captureObject)
@@ -101,11 +105,12 @@ public class ImageCapture : MonoBehaviour {
                 string filename = string.Format(@"CapturedImage{0}.jpg", tapsCount);
 
                 string filePath = Path.Combine(Application.persistentDataPath, filename);
+                lc.LogMessage(filePath);
 
                 VisionManager.instance.imagePath = filePath;
 
                 photoCaptureObject.TakePhotoAsync(filePath, PhotoCaptureFileOutputFormat.JPG, OnCapturedPhotoToDisk);
-
+                lc.LogMessage("Foto gespeichert");
                 currentlyCapturing = false;
             });
         });
